@@ -1,4 +1,4 @@
-export type Role = 'MAHASISWA' | 'SATPAM' | 'ASLAB' | 'ADMIN';
+export type Role = 'MAHASISWA' | 'SATPAM' | 'ADMIN';
 
 export type ItemStatus = 'SAVED' | 'IN_CLAIM_PROCESS' | 'RETURNED' | 'DISPOSED_DONATED';
 
@@ -7,7 +7,7 @@ export type CampusCode = 'D' | 'E' | 'G' | 'H' | 'J1' | 'K';
 export interface AuthUser {
   id: string;
   name: string;
-  identifier: string; // NPM untuk mahasiswa, NIP/ID untuk Petugas/Admin
+  identifier: string; // NPM untuk mahasiswa, ID Posko untuk Satpam, NIP untuk Admin
   role: Role;
   campus?: CampusCode;
   majorOrDepartment?: string;
@@ -31,7 +31,7 @@ export interface FoundItem {
   areaType: 'PUBLIC' | 'LAB' | 'CLASSROOM';
   labShift?: string;
   labPcNumber?: string;
-  storagePoint: string;
+  storagePoint: string; // Selalu di Pos Satpam
   lockerRackCode: string;
   foundDate: string;
   publicDescription: string;
@@ -39,7 +39,7 @@ export interface FoundItem {
   photoUrl: string;
   isCensored: boolean;
   status: ItemStatus;
-  finderType: 'SATPAM' | 'ASLAB' | 'MAHASISWA_DROPOFF';
+  finderType: 'SATPAM_PATROL' | 'MAHASISWA_DROPOFF' | 'ASLAB_DROPOFF' | 'DOSEN_DROPOFF';
   finderName: string;
   finderNpm?: string;
   expiryDate: string;

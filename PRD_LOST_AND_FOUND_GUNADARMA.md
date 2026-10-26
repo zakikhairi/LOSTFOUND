@@ -37,8 +37,8 @@ Saat ini, penanganan barang hilang masih memiliki kelemahan:
 | Peran | Deskripsi | Kebutuhan Utama |
 | :--- | :--- | :--- |
 | **Mahasiswa (Pelapor / Pengklaim)** | Mahasiswa aktif UG yang kehilangan atau menemukan barang di lingkungan kampus. | Mencari barang dengan filter kampus/ruang, membuat laporan kehilangan, menjawab pertanyaan validasi, dan menerima tiket pengambilan. |
-| **Petugas Posko (Satpam)** | Personil keamanan yang bertugas di pos satpam utama kampus (Kampus D, E, J1, K, dll.). | Input temuan cepat di selasar/parkiran, cetak label rak loker, scan tiket QR, verifikasi fisik, dan rekam tanda tangan mahasiswa. |
-| **Asisten Laboratorium (Aslab)** | Petugas piket ruang praktikum komputer / i-Lab (Kampus H, E, D, J). | Input temuan spesifik berdasarkan shift praktikum, mata kuliah, dan nomor meja PC. |
+| **Petugas Pos Satpam** | Personil keamanan di pos satpam kampus (Kampus D, E, G, H, J1, K). Satu-satunya otoritas lapangan yang berwenang membuat laporan temuan fisik. | Input temuan di selasar/parkiran/drop-off lab, cetak label rak loker posko, scan tiket QR, verifikasi fisik, dan rekam tanda tangan mahasiswa. |
+| **Civitas Kampus / Aslab (Penemu Non-Petugas)** | Mahasiswa, Dosen, atau Asisten Lab yang menemukan barang tercecer di kelas atau lab komputer. | Menyerahkan barang temuan ke Pos Satpam terdekat (Drop-off SOP) agar didata secara sah dan tersentralisasi oleh satpam. |
 | **Admin BAAK / Kemahasiswaan** | Pejabat berwenang tingkat universitas yang melakukan verifikasi data tingkat lanjut. | Layar perbandingan (*split-screen*) jawaban mahasiswa vs catatan fisik satpam, persetujuan klaim, audit barang kadaluarsa/donasi. |
 
 ---
@@ -102,7 +102,7 @@ Pemberian barang di posko satpam tidak lagi menggunakan secarik kertas yang muda
 | **FR-03** | Sensor Privasi | Sistem secara otomatis menyamarkan foto dokumen sensitif pada katalog publik. | P0 (Must Have) |
 | **FR-04** | Form Klaim | Sistem mewajibkan pengklaim menjawab pertanyaan ciri khusus rahasia dan melampirkan berkas bukti pendukung. | P0 (Must Have) |
 | **FR-05** | Reverse Matching | Sistem menghitung skor kecocokan antara form laporan kehilangan mahasiswa dengan inventaris barang temuan posko. | P1 (High) |
-| **FR-06** | Input Posko | Petugas satpam/aslab dapat mencatat temuan barang dengan field lokasi, titik simpan loker, dan catatan rahasia penguji. | P0 (Must Have) |
+| **FR-06** | Input Pos Satpam | Petugas Pos Satpam menjadi satu-satunya otoritas lapangan yang dapat mencatat temuan barang (baik dari patroli maupun drop-off aslab/mahasiswa) dengan field lokasi, titik simpan loker posko, dan catatan rahasia penguji. | P0 (Must Have) |
 | **FR-07** | Tiket QR | Sistem menerbitkan QR Code unik sebagai tiket pengambilan fisik setelah klaim disetujui BAAK. | P0 (Must Have) |
 | **FR-08** | BAST Kanvas | Sistem menyediakan modul kanvas tanda tangan digital pada perangkat posko saat proses serah terima barang. | P0 (Must Have) |
 | **FR-09** | Split Verification | Dashboard admin menyediakan layar komparasi berdampingan antara data klaim mahasiswa vs catatan rahasia satpam. | P0 (Must Have) |

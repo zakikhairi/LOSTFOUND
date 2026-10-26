@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GraduationCap, Shield, Building2, KeyRound, ArrowLeft, CheckCircle2, Lock, Sparkles, UserCheck } from 'lucide-react';
+import { GraduationCap, Shield, Building2, KeyRound, ArrowLeft, Lock, Sparkles } from 'lucide-react';
 import { AuthUser, Role, CampusCode } from '../types';
 import { MOCK_USERS } from '../data/mockUsers';
 import { CAMPUSES } from '../data/mockData';
@@ -15,7 +15,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   onCancel,
   initialRoleTab = 'MAHASISWA'
 }) => {
-  const [selectedPortal, setSelectedPortal] = useState<Role>(initialRoleTab);
+  const [selectedPortal, setSelectedPortal] = useState<Role>(initialRoleTab === 'ADMIN' ? 'ADMIN' : initialRoleTab === 'SATPAM' ? 'SATPAM' : 'MAHASISWA');
 
   // Form states
   const [npmInput, setNpmInput] = useState('50422910');
@@ -44,22 +44,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     } else if (selectedPortal === 'SATPAM') {
       const user: AuthUser = {
         id: `user-satpam-${Date.now()}`,
-        name: officerCampus === 'E' ? 'Suwarno' : 'Bambang Suherman',
+        name: officerCampus === 'E' ? 'Pak Suwarno' : 'Bambang Suherman',
         identifier: officerIdInput,
         role: 'SATPAM',
-        majorOrDepartment: `Komandan Regu Posko Satpam Kampus ${officerCampus}`,
-        email: `security.k${officerCampus.toLowerCase()}@gunadarma.ac.id`,
-        campus: officerCampus
-      };
-      onLoginSuccess(user);
-    } else if (selectedPortal === 'ASLAB') {
-      const user: AuthUser = {
-        id: `user-aslab-${Date.now()}`,
-        name: 'Fajar Kurniawan',
-        identifier: officerIdInput,
-        role: 'ASLAB',
-        majorOrDepartment: `Asisten Laboratorium TI (Kampus ${officerCampus})`,
-        email: 'aslab.ti@staff.gunadarma.ac.id',
+        majorOrDepartment: `Petugas Pos Satpam Kampus ${officerCampus}`,
+        email: `satpam.k${officerCampus.toLowerCase()}@gunadarma.ac.id`,
         campus: officerCampus
       };
       onLoginSuccess(user);
@@ -136,19 +125,19 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             >
               <span className="text-base">🛡️</span>
               <div>
-                <div className="font-bold text-[11px] text-ug-gold">Satpam Posko</div>
-                <div className="text-[10px] text-purple-200">Bambang (Kampus D)</div>
+                <div className="font-bold text-[11px] text-ug-gold">Pos Satpam D</div>
+                <div className="text-[10px] text-purple-200">Bambang (Margonda)</div>
               </div>
             </button>
 
             <button
-              onClick={() => handleQuickDemoLogin('aslab')}
+              onClick={() => handleQuickDemoLogin('satpamE')}
               className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-left transition flex items-center gap-2 border border-white/10"
             >
-              <span className="text-base">💻</span>
+              <span className="text-base">🛡️</span>
               <div>
-                <div className="font-bold text-[11px] text-ug-gold">Asisten Lab</div>
-                <div className="text-[10px] text-purple-200">Fajar (Lab TI H)</div>
+                <div className="font-bold text-[11px] text-ug-gold">Pos Satpam E</div>
+                <div className="text-[10px] text-purple-200">Pak Suwarno (KD)</div>
               </div>
             </button>
 
@@ -188,13 +177,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               type="button"
               onClick={() => setSelectedPortal('SATPAM')}
               className={`py-2 px-1 text-xs font-bold rounded-lg transition flex flex-col items-center gap-1 ${
-                selectedPortal === 'SATPAM' || selectedPortal === 'ASLAB'
+                selectedPortal === 'SATPAM'
                   ? 'bg-ug-purple text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <Shield className="w-4 h-4" />
-              <span>Petugas Posko</span>
+              <span>Pos Satpam</span>
             </button>
 
             <button
@@ -253,58 +242,23 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               </>
             )}
 
-            {/* 2. PORTAL PETUGAS POSKO (SATPAM & ASLAB) */}
-            {(selectedPortal === 'SATPAM' || selectedPortal === 'ASLAB') && (
+            {/* 2. PORTAL PETUGAS POS SATPAM */}
+            {selectedPortal === 'SATPAM' && (
               <>
                 <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900">
-                  <span className="font-bold block">Otoritas Petugas Lapangan</span>
-                  <span className="text-[11px] text-amber-800">
-                    Khusus personil keamanan posko & asisten laboratorium bertugas.
+                  <span className="font-bold flex items-center gap-1 text-xs">
+                    <Shield className="w-3.5 h-3.5 text-amber-700" />
+                    Pusat Pelaporan Temuan (Pos Satpam)
                   </span>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Jenis Tugas Lapangan
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedPortal('SATPAM');
-                        setOfficerIdInput('SEC-KAMPUS-D');
-                        setOfficerCampus('D');
-                      }}
-                      className={`py-1.5 px-2 rounded-lg text-xs font-semibold border ${
-                        selectedPortal === 'SATPAM'
-                          ? 'border-ug-purple bg-purple-50 text-ug-purple'
-                          : 'border-slate-200 text-slate-600'
-                      }`}
-                    >
-                      🛡️ Satpam Posko
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedPortal('ASLAB');
-                        setOfficerIdInput('ASLAB-TI-08');
-                        setOfficerCampus('H');
-                      }}
-                      className={`py-1.5 px-2 rounded-lg text-xs font-semibold border ${
-                        selectedPortal === 'ASLAB'
-                          ? 'border-ug-purple bg-purple-50 text-ug-purple'
-                          : 'border-slate-200 text-slate-600'
-                      }`}
-                    >
-                      💻 Asisten Lab
-                    </button>
-                  </div>
+                  <span className="text-[11px] text-amber-800 block mt-0.5">
+                    Hanya personil Pos Satpam yang berwenang mendata barang temuan dan mengelola rak penyimpanan fisik posko.
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      ID Petugas
+                      ID Petugas Satpam
                     </label>
                     <input
                       type="text"
@@ -316,7 +270,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Penempatan Kampus
+                      Posko Kampus Jaga
                     </label>
                     <select
                       value={officerCampus}
@@ -332,7 +286,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    PIN Jaga / Shift
+                    PIN Jaga / Shift Satpam
                   </label>
                   <input
                     type="password"
@@ -393,7 +347,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               className="w-full mt-4 py-3 bg-ug-purple hover:bg-ug-purpleDark text-white text-xs font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-1.5"
             >
               <KeyRound className="w-4 h-4 text-ug-gold" />
-              <span>Masuk ke Dashboard {selectedPortal}</span>
+              <span>Masuk ke Dashboard {selectedPortal === 'SATPAM' ? 'Pos Satpam' : selectedPortal}</span>
             </button>
           </form>
         </div>

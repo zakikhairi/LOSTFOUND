@@ -58,7 +58,7 @@ export const INITIAL_FOUND_ITEMS: FoundItem[] = [
     photoUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop&q=80',
     isCensored: true, // Auto-blur for privacy!
     status: 'SAVED',
-    finderType: 'SATPAM',
+    finderType: 'SATPAM_PATROL',
     finderName: 'Pak Suwarno (Satpam E)',
     expiryDate: '2026-12-21'
   },
@@ -73,16 +73,16 @@ export const INITIAL_FOUND_ITEMS: FoundItem[] = [
     areaType: 'LAB',
     labShift: 'Shift 3 (13:30 - 15:30)',
     labPcNumber: 'PC-18',
-    storagePoint: 'Loket Ruang Asisten Lab TI Kampus H',
-    lockerRackCode: 'KOTAK-ASLAB-03',
+    storagePoint: 'Pos Satpam Utama Kampus H',
+    lockerRackCode: 'RAK-B / LOKER-03',
     foundDate: '2026-10-21 16:00',
-    publicDescription: 'Flashdisk warna hitam-perak tipe Type-C & Type-A. Tertinggal di port depan PC.',
+    publicDescription: 'Flashdisk warna hitam-perak tipe Type-C & Type-A. Tertinggal di port depan PC Lab TI dan diserahkan ke Pos Satpam Kampus H.',
     secretFeatures: 'Isi folder utama: Folder "SKRIPSI_FINAL_REV4" dan folder "PRAKTIKUM_JARKOM_3IA04".',
     photoUrl: 'https://images.unsplash.com/photo-1624823183492-f084fa315729?w=600&auto=format&fit=crop&q=80',
     isCensored: false,
     status: 'SAVED',
-    finderType: 'ASLAB',
-    finderName: 'Asisten Lab (Fajar)',
+    finderType: 'ASLAB_DROPOFF',
+    finderName: 'Diserahkan oleh Fajar (Aslab TI) ke Pos Satpam',
     expiryDate: '2027-01-21'
   },
   {
@@ -123,7 +123,7 @@ export const INITIAL_FOUND_ITEMS: FoundItem[] = [
     photoUrl: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=600&auto=format&fit=crop&q=80',
     isCensored: false,
     status: 'RETURNED',
-    finderType: 'SATPAM',
+    finderType: 'SATPAM_PATROL',
     finderName: 'Pak Bambang (Satpam D)',
     expiryDate: '2027-01-19'
   }

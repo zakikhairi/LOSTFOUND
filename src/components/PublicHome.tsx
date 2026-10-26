@@ -125,24 +125,24 @@ export const PublicHome: React.FC<PublicHomeProps> = ({
             </button>
           </div>
 
-          {/* Card 2: Satpam & Aslab */}
+          {/* Card 2: Petugas Pos Satpam */}
           <div className="bg-white rounded-2xl p-6 border-2 border-amber-100 hover:border-ug-gold transition shadow-sm hover:shadow-md flex flex-col justify-between space-y-4">
             <div className="space-y-3">
               <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
                 <Shield className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-base text-slate-900">Petugas Posko (Satpam & Aslab)</h3>
+              <h3 className="font-bold text-base text-slate-900">Petugas Pos Satpam (Pusat Registrasi)</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Input barang temuan di area selasar, kantin, parkir, atau lab komputer. Kelola rak loker dan serah terima barang dengan pemindai tiket QR.
+                Pusat resmi pelaporan dan penyimpanan barang temuan kampus. Satpam mendata barang hasil patroli posko maupun barang yang diserahkan (drop-off) oleh mahasiswa, aslab, dan dosen.
               </p>
               <ul className="text-[11px] text-slate-500 space-y-1.5 pt-1">
                 <li className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Form Cepat Input Temuan & Ciri Rahasia</span>
+                  <span>Form Resmi Input Temuan di Pos Satpam</span>
                 </li>
                 <li className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Manajemen Loker & Rak Posko</span>
+                  <span>Manajemen Loker & Rak Pos Satpam</span>
                 </li>
                 <li className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -154,7 +154,7 @@ export const PublicHome: React.FC<PublicHomeProps> = ({
               onClick={() => onOpenLogin('SATPAM')}
               className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
             >
-              <span>Masuk Portal Petugas Posko</span>
+              <span>Masuk Portal Pos Satpam</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

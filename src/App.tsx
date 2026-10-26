@@ -57,7 +57,7 @@ export function App() {
     // Redirect to the role's dedicated homepage
     if (user.role === 'MAHASISWA') {
       setActiveTab('student-dash');
-    } else if (user.role === 'SATPAM' || user.role === 'ASLAB') {
+    } else if (user.role === 'SATPAM') {
       setActiveTab('guard-portal');
     } else if (user.role === 'ADMIN') {
       setActiveTab('admin-portal');

@@ -24,18 +24,18 @@ export const MOCK_USERS: Record<string, AuthUser> = {
     name: 'Bambang Suherman',
     identifier: 'SEC-KAMPUS-D',
     role: 'SATPAM',
-    majorOrDepartment: 'Komandan Regu Posko Satpam',
+    majorOrDepartment: 'Komandan Regu Pos Satpam Kampus D Margonda',
     email: 'bambang.security@gunadarma.ac.id',
     campus: 'D'
   },
-  aslab: {
-    id: 'user-aslab-1',
-    name: 'Fajar Kurniawan',
-    identifier: 'ASLAB-TI-08',
-    role: 'ASLAB',
-    majorOrDepartment: 'Asisten Laboratorium TI (Kampus H)',
-    email: 'fajar.lab@staff.gunadarma.ac.id',
-    campus: 'H'
+  satpamE: {
+    id: 'user-satpam-2',
+    name: 'Pak Suwarno',
+    identifier: 'SEC-KAMPUS-E',
+    role: 'SATPAM',
+    majorOrDepartment: 'Petugas Jaga Pos Satpam Kampus E Kelapa Dua',
+    email: 'suwarno.security@gunadarma.ac.id',
+    campus: 'E'
   },
   admin: {
     id: 'user-admin-1',

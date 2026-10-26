@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { QrCode, PlusCircle, CheckSquare, PackageCheck, AlertCircle, Search, Laptop, Building2, Camera } from 'lucide-react';
+import { QrCode, PlusCircle, CheckSquare, PackageCheck, AlertCircle, Shield, Laptop, Building2 } from 'lucide-react';
 import { FoundItem, Claim, Role, CampusCode } from '../types';
 import { CAMPUSES, CATEGORIES } from '../data/mockData';
 
@@ -23,15 +23,13 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
   // Input Form States
   const [itemName, setItemName] = useState('');
   const [category, setCategory] = useState(CATEGORIES[0]);
-  const [campus, setCampus] = useState<CampusCode>(currentRole === 'ASLAB' ? 'H' : 'D');
+  const [campus, setCampus] = useState<CampusCode>('D');
   const [building, setBuilding] = useState('Gedung 2');
   const [specificSpot, setSpecificSpot] = useState('Selasar Lantai 2');
-  const [areaType, setAreaType] = useState<'PUBLIC' | 'LAB'>(currentRole === 'ASLAB' ? 'LAB' : 'PUBLIC');
+  const [areaType, setAreaType] = useState<'PUBLIC' | 'LAB'>('PUBLIC');
   const [labShift, setLabShift] = useState('Shift 2 (10:30 - 12:30)');
   const [labPcNumber, setLabPcNumber] = useState('PC-05');
-  const [storagePoint, setStoragePoint] = useState(
-    currentRole === 'ASLAB' ? 'Loket Ruang Asisten Lab TI Kampus H' : 'Pos Satpam Utama Kampus D'
-  );
+  const [storagePoint, setStoragePoint] = useState('Pos Satpam Utama Kampus D');
   const [lockerRackCode, setLockerRackCode] = useState('RAK-A / BOX-01');
   const [publicDescription, setPublicDescription] = useState('');
   const [secretFeatures, setSecretFeatures] = useState('');
@@ -39,10 +37,8 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
     'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80'
   );
   const [isCensored, setIsCensored] = useState(false);
-  const [finderType, setFinderType] = useState<'SATPAM' | 'ASLAB' | 'MAHASISWA_DROPOFF'>(
-    currentRole === 'ASLAB' ? 'ASLAB' : 'SATPAM'
-  );
-  const [finderName, setFinderName] = useState(currentRole === 'ASLAB' ? 'Fajar (Aslab)' : 'Bambang (Satpam)');
+  const [finderType, setFinderType] = useState<'SATPAM_PATROL' | 'MAHASISWA_DROPOFF' | 'ASLAB_DROPOFF' | 'DOSEN_DROPOFF'>('SATPAM_PATROL');
+  const [finderName, setFinderName] = useState('Bambang (Petugas Satpam)');
   const [inputSuccess, setInputSuccess] = useState(false);
 
   // Handover / QR Scan Simulation States
@@ -98,6 +94,11 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
     setHasSignature(false);
   };
 
+  const handleCampusChange = (newCampus: CampusCode) => {
+    setCampus(newCampus);
+    setStoragePoint(`Pos Satpam Utama Kampus ${newCampus}`);
+  };
+
   const handleSaveItem = (e: React.FormEvent) => {
     e.preventDefault();
     const newItem: FoundItem = {
@@ -111,7 +112,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
       areaType,
       labShift: areaType === 'LAB' ? labShift : undefined,
       labPcNumber: areaType === 'LAB' ? labPcNumber : undefined,
-      storagePoint,
+      storagePoint: `Pos Satpam Utama Kampus ${campus}`,
       lockerRackCode,
       foundDate: new Date().toISOString().replace('T', ' ').substring(0, 16),
       publicDescription,
@@ -150,19 +151,40 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
     setScannedTicketCode('');
   };
 
+  // Guard access restriction check
+  if (currentRole !== 'SATPAM' && currentRole !== 'ADMIN') {
+    return (
+      <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-4 max-w-2xl mx-auto shadow-sm">
+        <div className="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
+          <Shield className="w-8 h-8" />
+        </div>
+        <h2 className="text-xl font-bold text-slate-800">Akses Terbatas: Khusus Pos Satpam</h2>
+        <p className="text-xs text-slate-600 leading-relaxed">
+          Sesuai SOP Universitas Gunadarma, <strong>pembuatan laporan inventarisasi temuan dan penyimpanan fisik barang hanya dapat dilakukan oleh Petugas di Pos Satpam</strong>.
+        </p>
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600 text-left space-y-1.5">
+          <div className="font-semibold text-slate-800">Prosedur Drop-Off Kampus:</div>
+          <p>• Jika mahasiswa atau asisten lab menemukan barang di kelas atau lab, wajib segera menyerahkannya ke <strong>Pos Satpam terdekat</strong>.</p>
+          <p>• Petugas Pos Satpam yang akan mendata barang tersebut ke dalam sistem dan menyimpannya di rak loker posko.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header Guard Banner */}
       <div className="bg-slate-900 text-white p-5 rounded-2xl shadow-md border-l-4 border-ug-gold flex flex-wrap justify-between items-center gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-ug-gold text-slate-950 uppercase tracking-wider">
-              {currentRole === 'ASLAB' ? 'Akses Asisten Lab' : 'Akses Pos Satpam Kampus'}
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-ug-gold text-slate-950 uppercase tracking-wider flex items-center gap-1">
+              <Shield className="w-3 h-3" />
+              Akses Resmi Pos Satpam Kampus
             </span>
-            <span className="text-xs text-slate-400">ID Petugas: UG-OFFICER-009</span>
+            <span className="text-xs text-slate-400">ID Petugas: UG-SECURITY-POSKO</span>
           </div>
           <h2 className="text-lg font-bold text-white mt-1">
-            Portal Penanganan Fisik & Serah Terima Barang (Posko)
+            Portal Operasional Pos Satpam (Pusat Inventarisasi & Serah Terima)
           </h2>
         </div>
 
@@ -190,7 +212,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
             }`}
           >
             <PlusCircle className="w-3.5 h-3.5 text-ug-gold" />
-            + Input Temuan Baru
+            + Buat Laporan Temuan (Pos Satpam)
           </button>
 
           <button
@@ -200,7 +222,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
             }`}
           >
             <PackageCheck className="w-3.5 h-3.5 text-ug-gold" />
-            Daftar Rak / Loker
+            Daftar Rak Loker Posko
           </button>
         </div>
       </div>
@@ -228,7 +250,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
 
               <div className="pt-2 border-t border-slate-100">
                 <span className="text-[11px] font-semibold text-slate-500 block mb-2">
-                  Tiket yang Sudah Di-ACC Admin BAAK (Siap Diambil):
+                  Tiket yang Sudah Di-ACC Admin BAAK (Siap Diambil di Pos Satpam):
                 </span>
 
                 {approvedClaims.length === 0 ? (
@@ -290,7 +312,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                       <div>
                         <span className="text-[10px] font-bold text-ug-purple font-mono">BERITA ACARA DIGITAL (BAST)</span>
                         <h3 className="font-bold text-base text-slate-800">
-                          Serah Terima Barang ke Mahasiswa
+                          Serah Terima Barang ke Mahasiswa di Pos Satpam
                         </h3>
                       </div>
                       <span className="font-mono text-xs font-bold bg-slate-100 px-2 py-1 rounded text-slate-700">
@@ -305,7 +327,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                         <span className="font-bold text-slate-800">{item?.itemName}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Posisi Rak Loker:</span>
+                        <span className="text-slate-500">Posisi Rak Loker Posko:</span>
                         <span className="font-mono font-bold text-ug-purple">{item?.lockerRackCode}</span>
                       </div>
                       <div className="flex justify-between">
@@ -319,7 +341,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                     {/* Step 1: Physical Check Checkboxes */}
                     <div className="space-y-2 pt-2">
                       <span className="text-xs font-bold text-slate-700 block">
-                        Langkah Pemeriksaan Fisik di Posko:
+                        Langkah Pemeriksaan Fisik di Pos Satpam:
                       </span>
                       <label className="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
                         <input
@@ -376,7 +398,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                     {/* Step 3: Notes */}
                     <div>
                       <label className="block text-xs font-semibold text-slate-600 mb-1">
-                        Catatan Serah Terima Petugas
+                        Catatan Serah Terima Petugas Satpam
                       </label>
                       <input
                         type="text"
@@ -412,15 +434,15 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
         </div>
       )}
 
-      {/* Sub-tab 2: INPUT TEMUAN BARU */}
+      {/* Sub-tab 2: INPUT TEMUAN BARU (KHUSUS POS SATPAM) */}
       {activeSubTab === 'input' && (
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
           <div className="flex items-center gap-2 pb-4 mb-4 border-b border-slate-100">
             <PlusCircle className="w-5 h-5 text-ug-purple" />
             <div>
-              <h3 className="font-bold text-base text-slate-800">Formulir Input Barang Temuan Baru</h3>
+              <h3 className="font-bold text-base text-slate-800">Formulir Laporan Barang Temuan Baru</h3>
               <p className="text-xs text-slate-500">
-                Data akan langsung terbit di katalog publik dan memicu label cetak QR Code loker.
+                Pencatatan resmi terpusat oleh Petugas Pos Satpam. Barang yang diserahkan mahasiswa/aslab ke posko didata di sini.
               </p>
             </div>
           </div>
@@ -428,11 +450,51 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
           {inputSuccess && (
             <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs flex items-center gap-2">
               <CheckSquare className="w-4 h-4 text-emerald-600" />
-              <span>Barang berhasil disimpan! Kode registrasi dan label QR telah di-generate.</span>
+              <span>Barang temuan berhasil didaftarkan ke rak Pos Satpam & terbit di katalog!</span>
             </div>
           )}
 
           <form onSubmit={handleSaveItem} className="space-y-4">
+            {/* Sumber Temuan */}
+            <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-800 mb-1">
+                  Sumber Temuan / Diserahkan Oleh *
+                </label>
+                <select
+                  value={finderType}
+                  onChange={(e) => {
+                    const val = e.target.value as 'SATPAM_PATROL' | 'MAHASISWA_DROPOFF' | 'ASLAB_DROPOFF' | 'DOSEN_DROPOFF';
+                    setFinderType(val);
+                    if (val === 'SATPAM_PATROL') setFinderName('Petugas Satpam (Patroli)');
+                    else if (val === 'MAHASISWA_DROPOFF') setFinderName('Mahasiswa (Drop-Off ke Posko)');
+                    else if (val === 'ASLAB_DROPOFF') setFinderName('Asisten Lab (Drop-Off dari Lab)');
+                    else setFinderName('Dosen / Karyawan (Drop-Off)');
+                  }}
+                  className="w-full px-3 py-2 text-xs border border-amber-300 rounded-lg bg-white font-medium"
+                >
+                  <option value="SATPAM_PATROL">Ditemukan Petugas Satpam (Patroli Posko)</option>
+                  <option value="MAHASISWA_DROPOFF">Diserahkan Mahasiswa (Drop-Off ke Posko)</option>
+                  <option value="ASLAB_DROPOFF">Diserahkan Asisten Lab (Drop-Off dari Lab)</option>
+                  <option value="DOSEN_DROPOFF">Diserahkan Dosen / Staff (Drop-Off)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-800 mb-1">
+                  Keterangan Nama Penemu / Penyerah *
+                </label>
+                <input
+                  type="text"
+                  value={finderName}
+                  onChange={(e) => setFinderName(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-amber-300 rounded-lg bg-white"
+                  placeholder="Misal: Dimas (Mahasiswa) / Fajar (Aslab)"
+                  required
+                />
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -467,7 +529,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
             {/* Lokasi Fisik */}
             <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
               <span className="text-xs font-bold text-slate-700 block">
-                Lokasi & Area Ditemukan:
+                Lokasi & Area Barang Tercecer/Ditemukan:
               </span>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -475,7 +537,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                   <label className="block text-[11px] text-slate-600 mb-1">Kampus</label>
                   <select
                     value={campus}
-                    onChange={(e) => setCampus(e.target.value as CampusCode)}
+                    onChange={(e) => handleCampusChange(e.target.value as CampusCode)}
                     className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg"
                   >
                     {CAMPUSES.map(c => (
@@ -503,7 +565,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                     value={specificSpot}
                     onChange={(e) => setSpecificSpot(e.target.value)}
                     className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg"
-                    placeholder="Selasar dekat toilet"
+                    placeholder="Selasar dekat toilet / Meja PC"
                     required
                   />
                 </div>
@@ -518,7 +580,7 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                     onChange={(e) => setAreaType(e.target.value as 'PUBLIC' | 'LAB')}
                     className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg font-semibold"
                   >
-                    <option value="PUBLIC">Area Publik Kampus</option>
+                    <option value="PUBLIC">Area Publik (Selasar, Kantin, Parkir)</option>
                     <option value="LAB">Fasilitas Lab Terjadwal</option>
                   </select>
                 </div>
@@ -550,24 +612,26 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
               </div>
             </div>
 
-            {/* Penyimpanan Rak */}
+            {/* Penyimpanan Rak Pos Satpam */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Pos Tempat Barang Disimpan *
+                  Pos Tempat Barang Disimpan (Resmi Pos Satpam) *
                 </label>
                 <input
                   type="text"
                   value={storagePoint}
-                  onChange={(e) => setStoragePoint(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg"
-                  required
+                  readOnly
+                  className="w-full px-3 py-2 text-xs border border-slate-200 rounded-lg bg-slate-100 font-semibold text-slate-700"
                 />
+                <span className="text-[10px] text-slate-500 mt-0.5 block">
+                  *SOP Resmi: Seluruh barang temuan tersentralisasi di Pos Satpam.
+                </span>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Kode Rak / Loker Fisik *
+                  Kode Rak / Loker Fisik di Pos Satpam *
                 </label>
                 <input
                   type="text"
@@ -631,20 +695,20 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
               type="submit"
               className="w-full py-3 bg-ug-purple hover:bg-ug-purpleDark text-white text-xs font-bold rounded-xl shadow-md transition"
             >
-              Simpan Barang & Buat Label QR Loker
+              Simpan Laporan & Buat Label Loker Pos Satpam
             </button>
           </form>
         </div>
       )}
 
-      {/* Sub-tab 3: MANAJEMEN RAK & LOKER */}
+      {/* Sub-tab 3: MANAJEMEN RAK & LOKER POSKO */}
       {activeSubTab === 'lockers' && (
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center pb-3 border-b border-slate-100">
             <div>
-              <h3 className="font-bold text-base text-slate-800">Daftar Barang Tersimpan di Posko</h3>
+              <h3 className="font-bold text-base text-slate-800">Daftar Barang Tersimpan di Pos Satpam</h3>
               <p className="text-xs text-slate-500">
-                Memudahkan petugas shift berikutnya mengetahui posisi fisik barang di rak penyimpanan.
+                Memudahkan petugas jaga posko mengetahui posisi fisik barang di rak loker pos satpam.
               </p>
             </div>
             <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 rounded-lg text-slate-700">
@@ -658,9 +722,9 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                 <tr className="border-b border-slate-200 text-slate-400 font-semibold uppercase text-[10px]">
                   <th className="py-2.5 px-3">Kode Barang</th>
                   <th className="py-2.5 px-3">Nama Barang</th>
-                  <th className="py-2.5 px-3">Lokasi Rak Loker</th>
-                  <th className="py-2.5 px-3">Pos Simpan</th>
-                  <th className="py-2.5 px-3">Tanggal Input</th>
+                  <th className="py-2.5 px-3">Lokasi Rak Posko</th>
+                  <th className="py-2.5 px-3">Pos Satpam</th>
+                  <th className="py-2.5 px-3">Sumber Temuan</th>
                   <th className="py-2.5 px-3">Status</th>
                 </tr>
               </thead>
@@ -673,7 +737,18 @@ export const GuardPortal: React.FC<GuardPortalProps> = ({
                       {item.lockerRackCode}
                     </td>
                     <td className="py-3 px-3 text-slate-600">{item.storagePoint}</td>
-                    <td className="py-3 px-3 text-slate-500">{item.foundDate}</td>
+                    <td className="py-3 px-3 text-slate-500">
+                      <span className="text-[11px] block text-slate-700 font-medium">
+                        {item.finderName}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {item.finderType === 'SATPAM_PATROL'
+                          ? 'Patroli Satpam'
+                          : item.finderType === 'ASLAB_DROPOFF'
+                          ? 'Drop-Off Aslab'
+                          : 'Drop-Off Mahasiswa'}
+                      </span>
+                    </td>
                     <td className="py-3 px-3">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                         item.status === 'SAVED'

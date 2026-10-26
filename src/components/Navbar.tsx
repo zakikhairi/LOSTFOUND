@@ -169,8 +169,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               </>
             )}
 
-            {/* SATPAM & ASLAB LOGGED IN */}
-            {currentUser && (currentUser.role === 'SATPAM' || currentUser.role === 'ASLAB') && (
+            {/* SATPAM LOGGED IN */}
+            {currentUser && currentUser.role === 'SATPAM' && (
               <>
                 <button
                   onClick={() => setActiveTab('guard-portal')}
@@ -181,7 +181,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }`}
                 >
                   <Layers className="w-4 h-4" />
-                  Portal Posko Jaga
+                  Portal Pos Satpam
                 </button>
 
                 <button
